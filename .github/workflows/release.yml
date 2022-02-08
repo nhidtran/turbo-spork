@@ -8,12 +8,10 @@ jobs:
   logger:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
+      - name: Log github ref
         env:
-          GITHUB_CONTEXT: ${{ toJson(github.event) }}
         run: |
-          echo "$GITHUB_CONTEXT"
-          echo ${{ github.event }}
+          echo ${{ github.event.ref }}
   release:
     name: release
     runs-on: ubuntu-latest
@@ -24,13 +22,13 @@ jobs:
           cache: npm
           node-version: 16
 
-      - name: Dry Run the release
-        # if: github.ref == 'refs/head/next'
+      - name: Dry Run the release for RC branches
+        if: github.ref == 'refs/head/next'
         run: npx semantic-release --dry-run
 
-        # - name: Run the Release
-        #   if: github.ref == 'refs/head/master'
-        #   run: npx semantic-release
+      - name: Release
+        if: github.ref == 'refs/head/master'
+        run: npx semantic-release
 
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
