@@ -23,9 +23,8 @@ jobs:
         with:
           cache: npm
           node-version: 16
-
       - name: Dry Run the release
-        if: github.head_ref == 'next'
+        if: github.ref == 'refs/head/next'
         run: npx semantic-release --dry-run
 
       - name: Run the Release
