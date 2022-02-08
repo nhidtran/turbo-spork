@@ -18,11 +18,13 @@ jobs:
       - name: Dry Run the release for RC branches
         if: ${{ github.event.ref }} == 'refs/head/next'
         run: npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Release
         if: ${{ github.event.ref }} == 'refs/head/master'
         run: npx semantic-release
-
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
