@@ -5,12 +5,6 @@ name: Release
       - master
       - next
 jobs:
-  logger:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Log github ref
-        run: |
-          echo ${{ github.event.ref }}
   release:
     name: release
     runs-on: ubuntu-latest
@@ -22,11 +16,11 @@ jobs:
           node-version: 16
 
       - name: Dry Run the release for RC branches
-        if: github.event.ref == 'refs/head/next'
+        if: ${{ github.event.ref }} == 'refs/head/next'
         run: npx semantic-release --dry-run
 
       - name: Release
-        if: github.event.ref == 'refs/head/master'
+        if: ${{ github.event.ref }} == 'refs/head/master'
         run: npx semantic-release
 
         env:
