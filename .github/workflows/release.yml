@@ -22,11 +22,11 @@ jobs:
           node-version: 16
 
       - name: Dry Run the release for RC branches
-        if: github.ref == 'refs/head/next'
+        if: github.event.ref == 'refs/head/next'
         run: npx semantic-release --dry-run
 
       - name: Release
-        if: github.ref == 'refs/head/master'
+        if: github.event.ref == 'refs/head/master'
         run: npx semantic-release
 
         env:
