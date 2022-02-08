@@ -5,6 +5,20 @@ name: Release
       - master
       - next
 jobs:
+  pre-release:
+    name: dry run pre-release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/next'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          cache: npm
+          node-version: 16
+      - run: npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   release:
     name: release
     runs-on: ubuntu-latest
@@ -15,16 +29,7 @@ jobs:
           cache: npm
           node-version: 16
 
-      - name: Dry Run the release for RC branches
-        if: ${{ github.event.ref }} == 'refs/head/next'
-        run: npx semantic-release --dry-run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Release
-        if: ${{ github.event.ref }} == 'refs/head/master'
-        run: npx semantic-release
+      - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
