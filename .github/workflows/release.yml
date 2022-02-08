@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Log github ref
-        env:
         run: |
           echo ${{ github.event.ref }}
   release:
