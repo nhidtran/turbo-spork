@@ -23,14 +23,14 @@ jobs:
         with:
           cache: npm
           node-version: 16
-          
+
       - name: Dry Run the release
-        if: github.ref == 'refs/head/next'
+        # if: github.ref == 'refs/head/next'
         run: npx semantic-release --dry-run
 
-      - name: Run the Release
-        if: github.ref == 'refs/head/master'
-        run: npx semantic-release
+        # - name: Run the Release
+        #   if: github.ref == 'refs/head/master'
+        #   run: npx semantic-release
 
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
