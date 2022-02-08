@@ -2,6 +2,7 @@ name: Release
 "on":
   push:
     branches:
+      - master
       - next
 jobs:
   release:
@@ -13,8 +14,15 @@ jobs:
         with:
           cache: npm
           node-version: 16
-      - run: npm ci
-      - run: npx semantic-release
+          
+      - Dry Run the release
+        if: github.head_ref == 'next' || github.base_ref == 'master'
+        run: npx semantic-release --dry-run
+
+      - Run the Release
+        if: github.head_ref == 'master'
+        run: npx semantic-release
+
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
