@@ -8,7 +8,7 @@ jobs:
   pre-release:
     name: dry run pre-release
     runs-on: ubuntu-latest
-    if: github.head_ref == 'refs/head/next'
+    if: github.event.ref == 'refs/head/next'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
