@@ -2,10 +2,15 @@ name: Release
 "on":
   push:
     branches:
-      - master
+      - main
       - next
+      - beta
 jobs:
   pre-release:
+    # doesn't draft a pre-release or any tags. Just outputs what the pre-release
+    # will look like once commits are pushed to main
+    # On call person should check the output of this job before merging into main
+    # and fix up any commit issues
     name: dry run pre-release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/next'
@@ -17,11 +22,11 @@ jobs:
           node-version: 16
       - run: npx semantic-release --dry-run
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
   # release:
   #   name: release
-  #   if: github.ref == 'refs/heads/master'
+  #   if: github.ref == 'refs/heads/main'
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v2
@@ -32,5 +37,5 @@ jobs:
 
   #     - run: npx semantic-release
   #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
